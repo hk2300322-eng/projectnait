@@ -1,53 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HTML Form Example</title>
 </head>
 <body>
 
-    <h2>Registration Form</h2>
+  <div class="container">
 
-    <form action="#" method="post">
+    <div class="left">
+      <input type="text" id="name" placeholder="Enter name">
+      <button onclick="saveUser()">Save</button>
+    </div>
 
-        <!-- Name -->
-        <label>Full Name:</label><br>
-        <input type="text" name="fullname" placeholder="Enter your name"><br><br>
+    <div class="right">
+      <h3>Users</h3>
+      <div id="users"></div>
+    </div>
 
-        <!-- Email -->
-        <label>Email:</label><br>
-        <input type="email" name="email" placeholder="Enter your email"><br><br>
+  </div>
 
-        <!-- Password -->
-        <label>Password:</label><br>
-        <input type="password" name="password" placeholder="Enter password"><br><br>
+  <script>
+    const API = "";
 
-        <!-- Gender -->
-        <label>Gender:</label><br>
-        <input type="radio" name="gender" value="Male"> Male
-        <input type="radio" name="gender" value="Female"> Female<br><br>
+    async function saveUser() {
+      const name = document.getElementById("name").value;
 
-        <!-- Hobbies -->
-        <label>Hobbies:</label><br>
-        <input type="checkbox" name="hobby" value="Reading"> Reading
-        <input type="checkbox" name="hobby" value="Gaming"> Gaming
-        <input type="checkbox" name="hobby" value="Sports"> Sports<br><br>
+      await fetch(API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name })
+      });
 
-        <!-- City -->
-        <label>City:</label><br>
-        <select name="city">
-            <option>Raipur</option>
-            <option>Delhi</option>
-            <option>Mumbai</option>
-        </select><br><br>
+      document.getElementById("name").value = "";
+      loadUsers();
+    }
 
-        <!-- Message -->
-        <label>Message:</label><br>
-        <textarea name="message" rows="4" cols="30"></textarea><br><br>
+    async function loadUsers() {
+      const res = await fetch(API);
+      const users = await res.json();
 
-        <!-- Submit Button -->
-        <input type="submit" value="Submit">
+      document.getElementById("users").innerHTML =
+        users.map(u => `<p>${u.name}</p>`).join("");
+    }
 
-    </form>
+    loadUsers();
+  </script>
 
 </body>
 </html>
